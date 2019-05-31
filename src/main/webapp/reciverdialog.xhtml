@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title></title>       
+    </h:head>
+    <script type="text/javascript">
+        function socketListener(message, channel, event) {
+            //document.getElementById("clockId").innerHTML += message + "<br/>";
+            document.getElementById("clockId").innerHTML = message + "<br/>";
+
+            alert('Time is: ' + message)
+        }
+    </script>    
+    <h:body>       
+        <h1>RECIBER</h1>
+        <div id="clockId"></div>
+        <div id="size"></div>
+        <h:form id="form" prependId="false">          
+
+            <!--            <f:websocket channel="clock">
+                            <f:ajax event="updateNotifications"  render=":datatable" />
+                        </f:websocket>-->
+
+         
+            <p:outputLabel value="" id="label" widgetVar="label"/>
+
+          
+   <f:websocket channel="clock" onmessage="socketListener"  />  
+<div class="row">
+					<div class="col-sm-12">
+						<textarea id="chat-history" class="form-control" rows="10" cols="70" readonly="true" style="resize:none;"></textarea>
+					</div>
+				</div>
+               
+            <hr/>
+
+        </h:form>
+    </h:body>
+</html>
+

@@ -1,7 +1,11 @@
 package com.avbravo.jmoordbwebsocket.websocket;
 
+
+import com.avbravo.jmoordbwebsocket.entity.Mensajes;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.enterprise.context.ApplicationScoped;
@@ -15,18 +19,51 @@ import javax.inject.Named;
 public class PushSocket implements Serializable {
 
     private static final Logger LOG = Logger.getLogger(PushSocket.class.getName());
-
+    List<Mensajes> mensajesList = new ArrayList<>();
     @Inject
     @Push(channel = "clock")
     private PushContext push;
+    private String value="";
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+    
+
+    public List<Mensajes> getMensajesList() {
+        System.out.println("======================================");
+        System.out.println("mensajes");
+        for(Mensajes m:mensajesList){
+            System.out.println("--->Time: "+m.getTime() + " : "+m.getData());
+        }
+        return mensajesList;
+    }
+
+    public void setMensajesList(List<Mensajes> mensajesList) {
+        this.mensajesList = mensajesList;
+    }
+    
+    
 
     public void clockAction() {
         Calendar now = Calendar.getInstance();
 
         String time = now.get(Calendar.HOUR_OF_DAY) + ":" + now.get(Calendar.MINUTE) + ":" + now.get(Calendar.SECOND);
         LOG.log(Level.INFO, "Time: {0}", time);
-
+ Mensajes m = new Mensajes();
+        m.setTime(time);
+        m.setData(time+"a");
+        mensajesList.add(m);
+        
+        System.out.println("---> agregando");
+        value=time;
         push.send(time);
+        //push.send("updateNotifications");
+       
     }
 
 }

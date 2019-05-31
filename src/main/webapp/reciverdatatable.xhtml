@@ -1,0 +1,67 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title></title>       
+    </h:head>
+    <script type="text/javascript">
+        function socketListener(message, channel, event) {
+            //document.getElementById("clockId").innerHTML += message + "<br/>";
+            document.getElementById("clockId").innerHTML = message + "<br/>";
+
+//            document.getElementById('datatable').reload(true);
+            var table = document.getElementById("form:datatable").refresh();
+            var table2 = document.getElementById("form:datalist").update();
+
+
+            elementW.update();
+            elementW.update();
+     
+        }
+    </script>    
+    <h:body>       
+        <h1>RECIBER</h1>
+        <div id="clockId"></div>
+ 
+        <h:form id="form" prependId="false">          
+
+            <!--            <f:websocket channel="clock">
+                            <f:ajax event="updateNotifications"  render=":datatable" />
+                        </f:websocket>-->
+
+         
+            <p:outputLabel value="" id="label" widgetVar="label"/>
+
+            <p:outputPanel>
+                <p:autoUpdate />
+
+   <f:websocket channel="clock" onmessage="socketListener"  />  
+
+                <p:dataList value="#{pushSocket.mensajesList}" var="car" type="ordered"
+                            id="dataList">
+                    <f:facet name="header">
+                        Basic
+                    </f:facet>
+                    #{car.time}, #{car.data}
+                </p:dataList>
+                <p:dataTable id="datatable" 
+                             widgetVar="elementW"
+                             value="#{pushSocket.mensajesList}"
+                             var="item">
+                    <p:column headerText="time">
+                        <p:outputLabel value="#{item.time}"/>
+                    </p:column>
+                    <p:column headerText="data">
+                        <p:outputLabel value="#{item.data}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:outputPanel>
+            <hr/>
+
+        </h:form>
+    </h:body>
+</html>
+
